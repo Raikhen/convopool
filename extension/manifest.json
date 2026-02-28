@@ -2,11 +2,15 @@
   "manifest_version": 3,
   "name": "ConvoPool",
   "version": "0.1.0",
-  "description": "Share your ChatGPT conversations for AI safety research",
-  "permissions": ["storage", "activeTab"],
+  "description": "Share your AI conversations for AI safety research",
+  "permissions": ["storage", "activeTab", "scripting"],
   "host_permissions": [
     "https://chatgpt.com/*",
-    "https://chat.openai.com/*"
+    "https://chat.openai.com/*",
+    "https://claude.ai/*",
+    "https://grok.com/*",
+    "https://gemini.google.com/*",
+    "https://convopool.vercel.app/*"
   ],
   "action": {
     "default_popup": "popup.html",
@@ -19,6 +23,24 @@
         "https://chat.openai.com/*"
       ],
       "js": ["content.js"]
+    },
+    {
+      "matches": [
+        "https://claude.ai/*"
+      ],
+      "js": ["content-claude.js"]
+    },
+    {
+      "matches": [
+        "https://grok.com/*"
+      ],
+      "js": ["content-grok.js"]
+    },
+    {
+      "matches": [
+        "https://gemini.google.com/*"
+      ],
+      "js": ["content-gemini.js"]
     }
   ],
   "background": {

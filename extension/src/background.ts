@@ -1,7 +1,8 @@
 import type { ConversationPayload } from "./types";
 
 const BACKEND_URL = "https://convopool.vercel.app/api";
-const API_KEY = "TODO_REPLACE_WITH_API_KEY"; // TODO: replace with your API_KEY env var value
+
+let isDraining = false;
 
 async function uploadConversation(payload: ConversationPayload): Promise<{ success: boolean; error?: string }> {
   try {
@@ -9,7 +10,6 @@ async function uploadConversation(payload: ConversationPayload): Promise<{ succe
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "X-API-Key": API_KEY,
       },
       body: JSON.stringify(payload),
     });
@@ -41,32 +41,38 @@ async function queueForRetry(payload: ConversationPayload): Promise<void> {
 }
 
 async function drainRetryQueue(): Promise<void> {
-  const { retryQueue = [] } = await chrome.storage.local.get("retryQueue");
-  if (retryQueue.length === 0) return;
+  if (isDraining) return;
+  isDraining = true;
 
-  console.log(`Draining retry queue (${retryQueue.length} items)`);
-  const remaining: ConversationPayload[] = [];
+  try {
+    const { retryQueue = [] } = await chrome.storage.local.get("retryQueue");
+    if (retryQueue.length === 0) return;
 
-  for (const payload of retryQueue) {
-    try {
-      const response = await fetch(`${BACKEND_URL}/conversations`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "X-API-Key": API_KEY,
-        },
-        body: JSON.stringify(payload),
-      });
-      if (!response.ok) {
+    console.log(`Draining retry queue (${retryQueue.length} items)`);
+    const remaining: ConversationPayload[] = [];
+
+    for (const payload of retryQueue) {
+      try {
+        const response = await fetch(`${BACKEND_URL}/conversations`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
+        });
+        if (!response.ok) {
+          remaining.push(payload);
+        }
+      } catch {
         remaining.push(payload);
+        break; // Stop trying if we're failing
       }
-    } catch {
-      remaining.push(payload);
-      break; // Stop trying if we're failing
     }
-  }
 
-  await chrome.storage.local.set({ retryQueue: remaining });
+    await chrome.storage.local.set({ retryQueue: remaining });
+  } finally {
+    isDraining = false;
+  }
 }
 
 // Listen for messages from the popup

@@ -3,25 +3,29 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=300">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="popup.css">
   <title>ConvoPool</title>
 </head>
 <body>
   <div class="container">
-    <h1>ConvoPool</h1>
+    <div class="header">
+      <img src="icons/icon48.png" alt="ConvoPool" class="logo">
+      <h1>ConvoPool</h1>
+    </div>
 
-    <div id="consent-view">
-      <p>Help improve AI safety by sharing your ChatGPT conversations with researchers.</p>
+    <div id="consent-view" class="view">
+      <p>Help improve AI safety by sharing your AI conversations with researchers.</p>
       <p class="detail">Your conversations will be added to a public dataset used for AI safety research. Only share conversations you're comfortable making public.</p>
       <button id="consent-btn" class="btn btn-primary">I agree to share my conversations</button>
     </div>
 
-    <div id="share-view" style="display: none;">
-      <p>Navigate to a ChatGPT conversation, then click below to share it.</p>
-      <button id="share-btn" class="btn btn-primary">Share this conversation</button>
-      <div id="status" class="status"></div>
-      <hr>
-      <button id="opt-out-btn" class="btn btn-secondary">Withdraw consent</button>
+    <div id="share-view" class="view hidden">
+      <button id="share-btn" class="btn btn-primary hidden">Share this conversation</button>
+      <p id="error-status" class="error-msg hidden"></p>
+      <p id="no-chat-msg">Navigate to a conversation on ChatGPT, Claude, Grok, or Gemini to share it.</p>
     </div>
   </div>
 

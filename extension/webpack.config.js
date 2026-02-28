@@ -5,6 +5,9 @@ module.exports = {
   entry: {
     background: "./src/background.ts",
     content: "./src/content.ts",
+    "content-claude": "./src/content-claude.ts",
+    "content-grok": "./src/content-grok.ts",
+    "content-gemini": "./src/content-gemini.ts",
     popup: "./src/popup.ts",
   },
   output: {

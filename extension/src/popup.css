@@ -5,94 +5,128 @@
 }
 
 body {
-  width: 320px;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  font-size: 14px;
-  color: #1a1a1a;
-  background: #fafafa;
+  width: 340px;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 13.5px;
+  color: #1e293b;
+  background: #f0fdfa;
 }
 
 .container {
-  padding: 16px;
+  padding: 20px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid #ccfbf1;
+}
+
+.logo {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
 }
 
 h1 {
-  font-size: 16px;
+  font-size: 17px;
   font-weight: 600;
-  margin-bottom: 12px;
-  color: #111;
+  color: #0f766e;
+  letter-spacing: -0.3px;
+}
+
+/* Views + transitions */
+.view {
+  transition: opacity 0.25s ease;
+}
+
+.view.fading-out {
+  opacity: 0;
 }
 
 p {
-  margin-bottom: 10px;
-  line-height: 1.5;
+  margin-bottom: 12px;
+  line-height: 1.55;
+  color: #334155;
+}
+
+p:last-child {
+  margin-bottom: 0;
 }
 
 .detail {
   font-size: 12px;
-  color: #555;
+  color: #64748b;
+  line-height: 1.5;
 }
 
+/* Buttons */
 .btn {
   display: block;
   width: 100%;
-  padding: 10px 16px;
+  padding: 11px 16px;
   border: none;
-  border-radius: 6px;
-  font-size: 14px;
+  border-radius: 10px;
+  font-family: inherit;
+  font-size: 13.5px;
   font-weight: 500;
   cursor: pointer;
-  transition: background 0.15s;
+  transition: background 0.2s, transform 0.1s, box-shadow 0.2s;
+}
+
+.btn:active {
+  transform: scale(0.98);
 }
 
 .btn-primary {
-  background: #2563eb;
+  background: linear-gradient(135deg, #14b8a6, #0f766e);
   color: #fff;
+  box-shadow: 0 1px 3px rgba(15, 118, 110, 0.25);
 }
 
 .btn-primary:hover {
-  background: #1d4ed8;
+  background: linear-gradient(135deg, #0d9488, #0a5f58);
 }
 
 .btn-primary:disabled {
-  background: #93c5fd;
   cursor: not-allowed;
+  transform: none;
 }
 
-.btn-secondary {
-  background: transparent;
-  color: #666;
-  font-size: 12px;
-  padding: 6px;
-  margin-top: 8px;
+/* Button states: loading — must override :disabled */
+.btn-primary.loading,
+.btn-primary.loading:disabled {
+  background: linear-gradient(135deg, #0d9488, #0a5f58);
+  color: #fff;
+  opacity: 1;
+  box-shadow: none;
 }
 
-.btn-secondary:hover {
-  color: #333;
-  background: #eee;
+/* Button states: success — must override :disabled */
+.btn-primary.success,
+.btn-primary.success:disabled {
+  background: #0f766e;
+  color: #fff;
+  opacity: 1;
+  box-shadow: none;
 }
 
-hr {
-  border: none;
-  border-top: 1px solid #e5e5e5;
-  margin: 12px 0;
-}
-
-.status {
-  margin-top: 10px;
-  font-size: 13px;
-  text-align: center;
-  min-height: 20px;
-}
-
-.status.success {
-  color: #16a34a;
-}
-
-.status.error {
+/* Error message below button */
+.error-msg {
+  font-size: 12.5px;
+  font-weight: 500;
   color: #dc2626;
+  text-align: center;
+  margin-top: 10px;
+  margin-bottom: 0;
+  transition: opacity 0.2s ease;
 }
 
-.status.loading {
-  color: #2563eb;
+/* Must be last to override any display values */
+.hidden {
+  display: none !important;
 }
+
