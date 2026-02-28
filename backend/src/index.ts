@@ -1,6 +1,6 @@
 import { Hono } from "hono";
 import { handle } from "hono/vercel";
-import { routes } from "./routes";
+import { routes } from "./routes.js";
 
 const app = new Hono().basePath("/api");
 app.route("/", routes);

@@ -1,7 +1,7 @@
 import { Hono } from "hono";
-import { config } from "./config";
-import { uploadConversation } from "./storage";
-import type { ConversationPayload, EnrichedConversation } from "./types";
+import { config } from "./config.js";
+import { uploadConversation } from "./storage.js";
+import type { ConversationPayload, EnrichedConversation } from "./types.js";
 
 const routes = new Hono();
 

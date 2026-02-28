@@ -1,6 +1,6 @@
 import { uploadFiles } from "@huggingface/hub";
-import { config } from "./config";
-import type { EnrichedConversation } from "./types";
+import { config } from "./config.js";
+import type { EnrichedConversation } from "./types.js";
 
 export async function uploadConversation(conversation: EnrichedConversation): Promise<void> {
   const filename = `conv_${conversation.conversation_id}_${Date.now()}.jsonl`;
