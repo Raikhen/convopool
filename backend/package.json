@@ -3,8 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "vercel dev",
-    "build": "vercel build"
+    "dev": "npx vercel dev"
   },
   "dependencies": {
     "hono": "^4.7.0",
