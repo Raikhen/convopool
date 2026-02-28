@@ -1,0 +1,13 @@
+{
+  "name": "convopool-backend",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "vercel dev",
+    "build": "vercel build"
+  },
+  "dependencies": {
+    "hono": "^4.7.0",
+    "@huggingface/hub": "^1.1.0"
+  }
+}

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=300">
+  <link rel="stylesheet" href="popup.css">
+  <title>ConvoPool</title>
+</head>
+<body>
+  <div class="container">
+    <h1>ConvoPool</h1>
+
+    <div id="consent-view">
+      <p>Help improve AI safety by sharing your ChatGPT conversations with researchers.</p>
+      <p class="detail">Your conversations will be added to a public dataset used for AI safety research. Only share conversations you're comfortable making public.</p>
+      <button id="consent-btn" class="btn btn-primary">I agree to share my conversations</button>
+    </div>
+
+    <div id="share-view" style="display: none;">
+      <p>Navigate to a ChatGPT conversation, then click below to share it.</p>
+      <button id="share-btn" class="btn btn-primary">Share this conversation</button>
+      <div id="status" class="status"></div>
+      <hr>
+      <button id="opt-out-btn" class="btn btn-secondary">Withdraw consent</button>
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
