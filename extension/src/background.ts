@@ -1,7 +1,7 @@
 import type { ConversationPayload } from "./types";
 
-const BACKEND_URL = "https://YOUR-SPACE.hf.space"; // TODO: replace with actual HF Space URL
-const API_KEY = "TODO_REPLACE_WITH_API_KEY"; // TODO: replace or load from storage
+const BACKEND_URL = "https://convopool.vercel.app/api";
+const API_KEY = "TODO_REPLACE_WITH_API_KEY"; // TODO: replace with your API_KEY env var value
 
 async function uploadConversation(payload: ConversationPayload): Promise<{ success: boolean; error?: string }> {
   try {
