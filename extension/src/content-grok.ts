@@ -1,5 +1,13 @@
 import type { ExtractedConversation, Message } from "./types";
 
+function cleanModelName(raw: string): string {
+  return raw
+    .trim()
+    .replace(/^(Model:\s*|Using\s+)/i, "")
+    .slice(0, 100)
+    .trim();
+}
+
 function extractConversation(): ExtractedConversation {
   const turns: Message[] = [];
 
@@ -69,16 +77,31 @@ function extractConversation(): ExtractedConversation {
 
   // Try to detect model name
   let model: string | undefined;
+
+  // Primary: data-testid / class selectors
   const modelSelector = document.querySelector('[data-testid="model-selector"], [class*="model-selector"], [class*="ModelSelector"]');
   if (modelSelector?.textContent) {
-    model = modelSelector.textContent.trim();
+    model = cleanModelName(modelSelector.textContent);
   }
+
+  // Fallback: check header for Grok model name (matches "Grok 3", "Grok 4", etc.)
   if (!model) {
-    // Grok may show model name in a header or dropdown
     const header = document.querySelector('header, [class*="header"]');
-    const modelMatch = header?.textContent?.match(/Grok[\s-]?\d*/i);
+    const modelMatch = header?.textContent?.match(/\bGrok[\s-]?[\w.]*\b/i);
     if (modelMatch) {
-      model = modelMatch[0].trim();
+      model = cleanModelName(modelMatch[0]);
+    }
+  }
+
+  // Fallback: scan all buttons and text elements for Grok model references
+  if (!model) {
+    const elements = Array.from(document.querySelectorAll("button, span, div"));
+    for (const el of elements) {
+      const match = el.textContent?.match(/\bGrok[\s-]?[\w.]+\b/i);
+      if (match) {
+        model = cleanModelName(match[0]);
+        break;
+      }
     }
   }
 

@@ -1,5 +1,13 @@
 import type { ExtractedConversation, Message } from "./types";
 
+function cleanModelName(raw: string): string {
+  return raw
+    .trim()
+    .replace(/^(Model:\s*|Using\s+)/i, "")
+    .slice(0, 100)
+    .trim();
+}
+
 function extractConversation(): ExtractedConversation {
   const turns: Message[] = [];
 
@@ -33,10 +41,32 @@ function extractConversation(): ExtractedConversation {
 
   // Try to detect model name from the UI
   let model: string | undefined;
-  // ChatGPT shows model name in various places — try common selectors
+
+  // Primary: data-testid selector (may still work for some users)
   const modelButton = document.querySelector('[data-testid="model-switcher-dropdown-button"]');
   if (modelButton?.textContent) {
-    model = modelButton.textContent.trim();
+    model = cleanModelName(modelButton.textContent);
+  }
+
+  // Fallback: scan for per-message "Used GPT-X" labels below assistant messages
+  if (!model) {
+    const allElements = Array.from(document.querySelectorAll('article [data-message-author-role="assistant"] ~ *, article span, article div'));
+    for (const el of allElements) {
+      const match = el.textContent?.match(/Used\s+(GPT-[\w.-]+)/i);
+      if (match) {
+        model = cleanModelName(match[1]);
+        break;
+      }
+    }
+  }
+
+  // Fallback: check URL for ?model= parameter
+  if (!model) {
+    const urlParams = new URLSearchParams(window.location.search);
+    const urlModel = urlParams.get("model");
+    if (urlModel) {
+      model = cleanModelName(urlModel);
+    }
   }
 
   return { turns, model };

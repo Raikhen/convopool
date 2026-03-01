@@ -1,5 +1,13 @@
 import type { ExtractedConversation, Message } from "./types";
 
+function cleanModelName(raw: string): string {
+  return raw
+    .trim()
+    .replace(/^(Model:\s*|Using\s+)/i, "")
+    .slice(0, 100)
+    .trim();
+}
+
 function extractConversation(): ExtractedConversation {
   const turns: Message[] = [];
 
@@ -68,16 +76,30 @@ function extractConversation(): ExtractedConversation {
 
   // Try to detect model name
   let model: string | undefined;
-  // Claude shows the model name in the model selector or header
+
+  // Primary: data-testid selectors
   const modelSelector = document.querySelector('[data-testid="model-selector"] button, [data-testid="model-picker"] button');
   if (modelSelector?.textContent) {
-    model = modelSelector.textContent.trim();
+    model = cleanModelName(modelSelector.textContent);
   }
+
   // Fallback: check for model name in common header areas
   if (!model) {
     const modelEl = document.querySelector('.model-name, [class*="ModelSelector"], [class*="model-selector"]');
     if (modelEl?.textContent) {
-      model = modelEl.textContent.trim();
+      model = cleanModelName(modelEl.textContent);
+    }
+  }
+
+  // Fallback: scan all buttons for known model name patterns
+  if (!model) {
+    const buttons = Array.from(document.querySelectorAll("button"));
+    for (const btn of buttons) {
+      const match = btn.textContent?.match(/\b(Sonnet|Opus|Haiku)\s*[\d.]*/i);
+      if (match) {
+        model = cleanModelName(match[0]);
+        break;
+      }
     }
   }
 

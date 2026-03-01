@@ -1,5 +1,13 @@
 import type { ExtractedConversation, Message } from "./types";
 
+function cleanModelName(raw: string): string {
+  return raw
+    .trim()
+    .replace(/^(Model:\s*|Using\s+)/i, "")
+    .slice(0, 100)
+    .trim();
+}
+
 /** Recursively query through Shadow DOM boundaries. */
 function deepQuerySelectorAll(root: Document | Element | ShadowRoot, selector: string): Element[] {
   const results: Element[] = Array.from(root.querySelectorAll(selector));
@@ -80,21 +88,34 @@ function extractConversation(): ExtractedConversation {
   // Try to detect model name
   let model: string | undefined;
 
-  // Gemini shows the model variant in a selector or header area
-  const modelSelector = deepQuerySelectorAll(document, '[class*="model"], .model-selector, [class*="ModelSelector"]');
-  for (const el of modelSelector) {
-    const text = el.textContent?.trim();
-    if (text && /gemini/i.test(text) && text.length < 80) {
-      model = text;
+  // Primary: model dropdown button in Gemini's prompt bar
+  const switchButtons = deepQuerySelectorAll(document, "button.input-area-switch");
+  for (const btn of switchButtons) {
+    const text = btn.textContent?.trim();
+    if (text && text.length < 80) {
+      model = cleanModelName(text);
       break;
     }
   }
 
-  // Fallback: parse document title (often contains "Gemini" or model variant)
+  // Fallback: class-based model selector elements
   if (!model) {
-    const titleMatch = document.title.match(/Gemini[\s\-]?[\d.]*(?: Pro| Ultra| Flash| Nano)?/i);
+    const modelSelector = deepQuerySelectorAll(document, '[class*="model"], .model-selector, [class*="ModelSelector"]');
+    for (const el of modelSelector) {
+      const text = el.textContent?.trim();
+      if (text && /gemini/i.test(text) && text.length < 80) {
+        model = cleanModelName(text);
+        break;
+      }
+    }
+  }
+
+  // Fallback: parse document title (matches "Gemini 2.5 Flash", "2.5 Pro", etc.)
+  if (!model) {
+    const titleMatch = document.title.match(/(?:Gemini[\s-]?)?[\d.]+\s*(?:Pro|Ultra|Flash|Nano)/i)
+      || document.title.match(/Gemini[\s-]?[\d.]*(?: Pro| Ultra| Flash| Nano)?/i);
     if (titleMatch) {
-      model = titleMatch[0].trim();
+      model = cleanModelName(titleMatch[0]);
     }
   }
 
