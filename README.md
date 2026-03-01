@@ -1,55 +1,51 @@
 # ConvoPool
 
-A Chrome extension that lets users voluntarily share their LLM conversations with a public HuggingFace dataset for AI safety research.
+A Chrome extension that lets you voluntarily share your AI chat conversations with a public dataset for AI safety research.
 
-## Architecture
+**One click, always opt-in.** No personal data is collected — you choose exactly which conversations to share.
 
-- **extension/** — Chrome extension (Manifest V3, TypeScript, webpack)
-- **backend/** — Bun + Hono API server, deployed on HuggingFace Spaces
+## How It Works
 
-## Backend Setup
+1. **Install** the ConvoPool Chrome extension
+2. **Chat** on ChatGPT, Claude, Grok, or Gemini as you normally would
+3. **Share** by clicking the extension icon and hitting "Share" — your conversation is appended to the public dataset
 
-```bash
-cd backend
-bun install
+Shared conversations go to the [ConvoPool HuggingFace dataset](https://huggingface.co/datasets/Raikhen/convopool-data).
+
+## Project Structure
+
+```
+extension/   Chrome Manifest V3 extension (TypeScript, Webpack)
+web/         Next.js landing site + API (Vercel)
 ```
 
-Set environment variables:
-```
-HF_TOKEN=hf_...           # HuggingFace write token
-HF_REPO_ID=user/dataset   # Target dataset repo
-API_KEY=your-secret-key    # Shared secret for extension auth
-```
+## Development
 
-Run:
-```bash
-bun run dev
-```
-
-Test:
-```bash
-curl -X POST http://localhost:7860/conversations \
-  -H "X-API-Key: your-secret-key" \
-  -H "Content-Type: application/json" \
-  -d '{"conversation_id":"test-1","platform":"chatgpt","turns":[{"role":"user","content":"hello"},{"role":"assistant","content":"hi"}],"captured_at":"2026-02-27T10:00:00Z","extension_version":"0.1.0"}'
-```
-
-## Extension Setup
+### Extension
 
 ```bash
 cd extension
-bun install   # or npm install
-bun run build
+bun install
+bun run build    # production build → dist/
+bun run dev      # webpack watch mode
 ```
 
-Then load `extension/dist/` as an unpacked extension in Chrome (`chrome://extensions` > Developer mode > Load unpacked).
+Load `extension/dist/` as an unpacked extension in Chrome (`chrome://extensions` → Developer mode → Load unpacked).
 
-## Deployment
+### Web
 
-The backend deploys as a Docker Space on HuggingFace:
+```bash
+cd web
+bun install
+bun run dev      # http://localhost:3000
+```
 
-1. Create a new HF Space (Docker SDK)
-2. Set secrets: `HF_TOKEN`, `HF_REPO_ID`, `API_KEY`
-3. Push the `backend/` directory
+Requires `HF_TOKEN` and `HF_REPO_ID` environment variables for the API routes (create a `.env.local` in `web/`).
 
-Update `extension/src/background.ts` with your Space URL and API key before building the extension.
+## Privacy
+
+ConvoPool only collects data when you explicitly click "Share." No cookies, no tracking, no personal identifiers. See the full [Privacy Policy](https://convopool.vercel.app/privacy).
+
+## License
+
+MIT

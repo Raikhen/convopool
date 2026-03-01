@@ -1,9 +1,10 @@
 {
   "manifest_version": 3,
   "name": "ConvoPool",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Share your AI conversations for AI safety research",
-  "permissions": ["storage", "activeTab", "scripting"],
+  "homepage_url": "https://convopool.vercel.app",
+  "permissions": ["storage", "scripting"],
   "host_permissions": [
     "https://chatgpt.com/*",
     "https://chat.openai.com/*",

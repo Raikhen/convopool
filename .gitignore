@@ -1,5 +1,6 @@
 node_modules/
 dist/
+.next/
 .vercel/
 *.lock
 .DS_Store
@@ -7,3 +8,4 @@ dist/
 .env.local
 .vercel
 .env*.local
+tinker/

@@ -3,9 +3,11 @@ export interface Message {
   content: string;
 }
 
+export type Platform = "chatgpt" | "claude" | "grok" | "gemini";
+
 export interface ConversationPayload {
   conversation_id: string;
-  platform: "chatgpt";
+  platform: Platform;
   model?: string;
   turns: Message[];
   captured_at: string;

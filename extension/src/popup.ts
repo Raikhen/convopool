@@ -1,6 +1,6 @@
 import type { ExtractedConversation, ConversationPayload, Platform } from "./types";
 
-const EXTENSION_VERSION = "0.1.0";
+const EXTENSION_VERSION = "1.0.0";
 const DEFAULT_SHARE_TEXT = "Share this conversation";
 
 const consentView = document.getElementById("consent-view")!;
