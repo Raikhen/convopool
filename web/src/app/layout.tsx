@@ -8,6 +8,13 @@ export const metadata: Metadata = {
   title: "ConvoPool — Share AI Conversations for Safety Research",
   description:
     "A Chrome extension that lets you voluntarily share your AI conversations with a public dataset for AI safety research.",
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "48x48" },
+      { url: "/icon.svg", type: "image/svg+xml" },
+    ],
+    apple: "/icon.svg",
+  },
 };
 
 export default function RootLayout({
