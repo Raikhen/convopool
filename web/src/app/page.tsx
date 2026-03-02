@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-const CHROME_STORE_URL = "#"; // TODO: replace with real Chrome Web Store link
+const CHROME_STORE_URL = "https://chromewebstore.google.com/detail/fapoeadaejjihojnmojnfjnjonceakma?utm_source=item-share-cb";
 const DATASET_URL = "https://huggingface.co/datasets/Raikhen/convopool-data";
 const GITHUB_URL = "https://github.com/Raikhen/convopool";
 
